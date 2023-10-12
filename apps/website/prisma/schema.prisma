@@ -11,16 +11,15 @@ datasource db {
 }
 
 model User {
-  id    String @id @unique // matches kinde user id
+  id    String @id @unique //matches kinde user id
   email String @unique
 
-  File File @relation(fields: [fileId], references: [id])
+  File File[]
 
-  stripeCustomeId        String?   @unique @map(name: "stripe_customer_id")
+  stripeCustomerId       String?   @unique @map(name: "stripe_customer_id")
   stripeSubscriptionId   String?   @unique @map(name: "stripe_subscription_id")
-  stripePriceId          String?   @unique @map(name: "stripe_price_id")
+  stripePriceId          String?   @map(name: "stripe_price_id")
   stripeCurrentPeriodEnd DateTime? @map(name: "stripe_current_period_end")
-  fileId                 String
 }
 
 enum UploadStatus {
@@ -41,5 +40,6 @@ model File {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  User      User[]
+  User      User?    @relation(fields: [userId], references: [id])
+  userId    String?
 }
