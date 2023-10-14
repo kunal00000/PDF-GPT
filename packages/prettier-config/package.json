@@ -1,0 +1,11 @@
+{
+  "name": "@docuconvo/prettier-config",
+  "version": "0.0.0",
+  "license": "MIT",
+  "private": true,
+  "main": "./prettier.json",
+  "devDependencies": {
+    "@trivago/prettier-plugin-sort-imports": "^4.2.0",
+    "prettier": "^3.0.3"
+  }
+}
