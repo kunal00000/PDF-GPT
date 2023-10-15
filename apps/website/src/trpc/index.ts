@@ -1,8 +1,9 @@
-import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
-import { privateProcedure, publicProcedure, router } from './trpc';
-import { TRPCError } from '@trpc/server';
-import { db } from '@/db';
-import { z } from 'zod';
+import { db } from "@/db";
+import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
+import { TRPCError } from "@trpc/server";
+import { z } from "zod";
+
+import { privateProcedure, publicProcedure, router } from "./trpc";
 
 export const appRouter = router({
   authCallback: publicProcedure.query(async () => {
@@ -10,14 +11,14 @@ export const appRouter = router({
     const user = getUser();
 
     if (!user.id || !user.email) {
-      throw new TRPCError({ code: 'UNAUTHORIZED', message: 'User not found' });
+      throw new TRPCError({ code: "UNAUTHORIZED", message: "User not found" });
     }
 
     // check if the user is in the database
     const dbUser = await db.user.findFirst({
       where: {
-        id: user.id
-      }
+        id: user.id,
+      },
     });
 
     if (!dbUser) {
@@ -25,8 +26,8 @@ export const appRouter = router({
       await db.user.create({
         data: {
           id: user.id,
-          email: user.email
-        }
+          email: user.email,
+        },
       });
     }
 
@@ -38,10 +39,28 @@ export const appRouter = router({
 
     return await db.file.findMany({
       where: {
-        userId
-      }
+        userId,
+      },
     });
   }),
+
+  getFile: privateProcedure
+    .input(z.object({ key: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const { userId } = ctx;
+
+      const file = await db.file.findFirst({
+        where: {
+          key: input.key,
+          userId,
+        },
+      });
+
+      if (!file)
+        throw new TRPCError({ code: "NOT_FOUND", message: "File not found" });
+
+      return file;
+    }),
 
   deleteFile: privateProcedure
     .input(z.object({ id: z.string() }))
@@ -51,22 +70,22 @@ export const appRouter = router({
       const file = await db.file.findFirst({
         where: {
           id: input.id,
-          userId
-        }
+          userId,
+        },
       });
 
       if (!file) {
-        throw new TRPCError({ code: 'NOT_FOUND', message: 'File not found' });
+        throw new TRPCError({ code: "NOT_FOUND", message: "File not found" });
       }
 
       await db.file.delete({
         where: {
-          id: input.id
-        }
+          id: input.id,
+        },
       });
 
       return file;
-    })
+    }),
 });
 
 // Export type router type signature,
