@@ -1,9 +1,10 @@
-import { db } from "@/db";
-import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
-import { TRPCError } from "@trpc/server";
-import { z } from "zod";
+import { z } from 'zod';
 
-import { privateProcedure, publicProcedure, router } from "./trpc";
+import { db } from '@/db';
+import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
+import { TRPCError } from '@trpc/server';
+
+import { privateProcedure, publicProcedure, router } from './trpc';
 
 export const appRouter = router({
   authCallback: publicProcedure.query(async () => {
@@ -11,7 +12,7 @@ export const appRouter = router({
     const user = getUser();
 
     if (!user.id || !user.email) {
-      throw new TRPCError({ code: "UNAUTHORIZED", message: "User not found" });
+      throw new TRPCError({ code: 'UNAUTHORIZED', message: 'User not found' });
     }
 
     // check if the user is in the database
@@ -57,7 +58,7 @@ export const appRouter = router({
       });
 
       if (!file)
-        throw new TRPCError({ code: "NOT_FOUND", message: "File not found" });
+        throw new TRPCError({ code: 'NOT_FOUND', message: 'File not found' });
 
       return file;
     }),
@@ -75,7 +76,7 @@ export const appRouter = router({
       });
 
       if (!file) {
-        throw new TRPCError({ code: "NOT_FOUND", message: "File not found" });
+        throw new TRPCError({ code: 'NOT_FOUND', message: 'File not found' });
       }
 
       await db.file.delete({

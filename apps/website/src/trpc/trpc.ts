@@ -1,5 +1,6 @@
 import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
 import { TRPCError, initTRPC } from '@trpc/server';
+
 /**
  * Initialization of tRPC backend
  * Should be done only once per backend!
@@ -19,8 +20,8 @@ const isAuth = middleware(async (opts) => {
   return opts.next({
     ctx: {
       userId: user.id,
-      user
-    }
+      user,
+    },
   });
 });
 
