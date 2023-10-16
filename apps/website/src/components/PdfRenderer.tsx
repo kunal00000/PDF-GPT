@@ -1,6 +1,13 @@
 'use client';
 
-import { ChevronDown, ChevronUp, Ghost, Loader2, Search } from 'lucide-react';
+import {
+  ChevronDown,
+  ChevronUp,
+  Ghost,
+  Loader2,
+  RotateCw,
+  Search,
+} from 'lucide-react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Document, Page, pdfjs } from 'react-pdf';
@@ -13,6 +20,7 @@ import { z } from 'zod';
 import { cn } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 
+import PdfFullscreen from './PdfFullscreen';
 import { Button } from './ui/button';
 import {
   DropdownMenu,
@@ -35,6 +43,10 @@ const PdfRenderer = ({ url }: PdfRendererProps) => {
   const [numPages, setNumPages] = useState<number>();
   const [currPage, setCurrPage] = useState<number>(1);
   const [scale, setScale] = useState<number>(1);
+  const [rotation, setRotation] = useState<number>(0);
+  const [renderedScale, setRenderedScale] = useState<number | null>(null);
+
+  const isLoading = renderedScale !== scale;
 
   const CustomPageValidator = z.object({
     page: z
@@ -70,6 +82,7 @@ const PdfRenderer = ({ url }: PdfRendererProps) => {
             disabled={currPage <= 1}
             onClick={() => {
               setCurrPage((prev) => (prev - 1 > 1 ? prev - 1 : 1));
+              setValue('page', String(currPage - 1));
             }}
             variant='ghost'
             aria-label='previous page'
@@ -102,6 +115,7 @@ const PdfRenderer = ({ url }: PdfRendererProps) => {
               setCurrPage((prev) =>
                 prev + 1 > numPages! ? numPages! : prev + 1,
               );
+              setValue('page', String(currPage + 1));
             }}
             variant='ghost'
             aria-label='previous page'
@@ -134,6 +148,16 @@ const PdfRenderer = ({ url }: PdfRendererProps) => {
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
+
+          <Button
+            onClick={() => setRotation((prev) => prev + 90)}
+            variant='ghost'
+            aria-label='rotate 90 degrees'
+          >
+            <RotateCw className='h-4 w-4' />
+          </Button>
+
+          <PdfFullscreen fileUrl={url} />
         </div>
       </div>
 
@@ -159,10 +183,28 @@ const PdfRenderer = ({ url }: PdfRendererProps) => {
               file={url}
               className='max-h-full'
             >
+              {isLoading && renderedScale ? (
+                <Page
+                  width={width ? width : 1}
+                  scale={scale}
+                  key={'@' + renderedScale}
+                  pageNumber={currPage}
+                  rotate={rotation}
+                />
+              ) : null}
               <Page
+                className={cn(isLoading ? 'hidden' : '')}
                 width={width ? width : 1}
                 scale={scale}
+                key={'@' + scale}
                 pageNumber={currPage}
+                rotate={rotation}
+                loading={
+                  <div className='flex justify-center'>
+                    <Loader2 className='my-24 h-6 w-6 animate-spin' />
+                  </div>
+                }
+                onRenderSuccess={() => setRenderedScale(scale)}
               />
             </Document>
           </div>
