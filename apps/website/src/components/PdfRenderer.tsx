@@ -3,7 +3,6 @@
 import {
   ChevronDown,
   ChevronUp,
-  Ghost,
   Loader2,
   RotateCw,
   Search,
