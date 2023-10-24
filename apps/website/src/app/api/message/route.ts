@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server';
 
 import { db } from '@/db';
-import { SendMessageValidator } from '@/lib/SendMessageValidator';
+import { SendMessageValidator } from '@/lib/validators/SendMessageValidator';
 import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
 
 export const POST = async (req: NextRequest) => {
