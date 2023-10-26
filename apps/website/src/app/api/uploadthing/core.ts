@@ -42,6 +42,14 @@ export const ourFileRouter = {
 
         const pageLevelDocs = await loader.load();
 
+        pageLevelDocs.forEach((pageLevelDoc) => {
+          pageLevelDoc.metadata = {
+            ...pageLevelDoc.metadata,
+            fileId: createdFile.id,
+            userId: metadata.userId,
+          };
+        });
+
         const pagesAmt = pageLevelDocs.length; // pages count
 
         // vectorize and index entire document
