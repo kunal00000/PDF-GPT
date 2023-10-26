@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.2",
+    "@huggingface/inference": "^2.6.4",
     "@kinde-oss/kinde-auth-nextjs": "^1.8.22",
     "@pinecone-database/pinecone": "^1.1.2",
     "@prisma/client": "5.4.2",

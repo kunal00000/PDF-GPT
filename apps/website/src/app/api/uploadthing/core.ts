@@ -1,5 +1,6 @@
 import { PDFLoader } from 'langchain/document_loaders/fs/pdf';
-import { OpenAIEmbeddings } from 'langchain/embeddings/openai';
+import { HuggingFaceInferenceEmbeddings } from 'langchain/embeddings/hf';
+// import { OpenAIEmbeddings } from 'langchain/embeddings/openai';
 import { PineconeStore } from 'langchain/vectorstores/pinecone';
 import { type FileRouter, createUploadthing } from 'uploadthing/next';
 
@@ -7,8 +8,11 @@ import { db } from '@/db';
 import { pinecone } from '@/lib/pinecone';
 import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
 
-const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
-if (!OPENAI_API_KEY) throw new Error('OPENAI_API_KEY is required.');
+// const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+// if (!OPENAI_API_KEY) throw new Error('OPENAI_API_KEY is required.');
+
+const HF_TOKEN = process.env.HF_TOKEN;
+if (!HF_TOKEN) throw new Error('HF_TOKEN is required.');
 
 const f = createUploadthing();
 
@@ -49,8 +53,9 @@ export const ourFileRouter = {
         // vectorize and index entire document
         const pineconeIndex = await pinecone.Index('docuconvo');
 
-        const embeddings = new OpenAIEmbeddings({
-          openAIApiKey: OPENAI_API_KEY,
+        const embeddings = new HuggingFaceInferenceEmbeddings({
+          model: 'sentence-transformers/all-MiniLM-L6-v2',
+          apiKey: HF_TOKEN,
         });
 
         await PineconeStore.fromDocuments(pageLevelDocs, embeddings, {

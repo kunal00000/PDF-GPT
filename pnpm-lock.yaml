@@ -26,6 +26,9 @@ importers:
       '@hookform/resolvers':
         specifier: ^3.3.2
         version: 3.3.2(react-hook-form@7.47.0)
+      '@huggingface/inference':
+        specifier: ^2.6.4
+        version: 2.6.4
       '@kinde-oss/kinde-auth-nextjs':
         specifier: ^1.8.22
         version: 1.8.22(react-dom@18.2.0)(react@18.2.0)
@@ -82,7 +85,7 @@ importers:
         version: 2.30.0
       langchain:
         specifier: 0.0.166
-        version: 0.0.166(@pinecone-database/pinecone@1.1.2)(pdf-parse@1.1.1)
+        version: 0.0.166(@huggingface/inference@2.6.4)(@pinecone-database/pinecone@1.1.2)(pdf-parse@1.1.1)
       lucide-react:
         specifier: ^0.284.0
         version: 0.284.0(react@18.2.0)
@@ -623,6 +626,11 @@ packages:
       react-hook-form: ^7.0.0
     dependencies:
       react-hook-form: 7.47.0(react@18.2.0)
+    dev: false
+
+  /@huggingface/inference@2.6.4:
+    resolution: {integrity: sha512-Xna7arltBSBoKaH3diGi3sYvkExgJMd/pF4T6vl2YbmDccbr1G/X5EPZ2048p+YgrJYG1jTYFCtY6Dr3HvJaow==}
+    engines: {node: '>=18'}
     dev: false
 
   /@humanwhocodes/config-array@0.11.10:
@@ -4847,7 +4855,7 @@ packages:
     resolution: {integrity: sha512-UfpWE/VZn0iP50d8cz9NrZLM9lSWhcJ+0Gt/nm4by88UL+J1SiKN8/5dkjMmbEzwL2CAe+67GsegCbIKtbp75A==}
     dev: false
 
-  /langchain@0.0.166(@pinecone-database/pinecone@1.1.2)(pdf-parse@1.1.1):
+  /langchain@0.0.166(@huggingface/inference@2.6.4)(@pinecone-database/pinecone@1.1.2)(pdf-parse@1.1.1):
     resolution: {integrity: sha512-ZO3hwZmvMaeR2bcGJGjyt8llCkzeGVso0c1KAj+StHZhf/piDgRMlxEL+4Hb8iFVCZboT228MY7xdgjaSGDMsg==}
     engines: {node: '>=18'}
     peerDependencies:
@@ -5124,6 +5132,7 @@ packages:
         optional: true
     dependencies:
       '@anthropic-ai/sdk': 0.6.8
+      '@huggingface/inference': 2.6.4
       '@pinecone-database/pinecone': 1.1.2
       ansi-styles: 5.2.0
       binary-extensions: 2.2.0
