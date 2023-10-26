@@ -1,7 +1,14 @@
+import { PDFLoader } from 'langchain/document_loaders/fs/pdf';
+import { OpenAIEmbeddings } from 'langchain/embeddings/openai';
+import { PineconeStore } from 'langchain/vectorstores/pinecone';
 import { type FileRouter, createUploadthing } from 'uploadthing/next';
 
 import { db } from '@/db';
+import { pinecone } from '@/lib/pinecone';
 import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
+
+const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+if (!OPENAI_API_KEY) throw new Error('OPENAI_API_KEY is required.');
 
 const f = createUploadthing();
 
@@ -25,6 +32,53 @@ export const ourFileRouter = {
           uploadStatus: 'PROCESSING',
         },
       });
+
+      try {
+        const response = await fetch(
+          `https://uploadthing-prod.s3.us-west-2.amazonaws.com/${file.key}`,
+        );
+
+        const blob = await response.blob();
+
+        const loader = new PDFLoader(blob);
+
+        const pageLevelDocs = await loader.load();
+
+        const pagesAmt = pageLevelDocs.length; // pages count
+
+        // vectorize and index entire document
+        const pineconeIndex = await pinecone.Index('docuconvo');
+
+        const embeddings = new OpenAIEmbeddings({
+          openAIApiKey: OPENAI_API_KEY,
+        });
+
+        await PineconeStore.fromDocuments(pageLevelDocs, embeddings, {
+          pineconeIndex,
+          // namespace: createdFile.id,
+        });
+
+        // set upload status to failed
+        await db.file.update({
+          data: {
+            uploadStatus: 'SUCCESS',
+          },
+          where: {
+            id: createdFile.id,
+          },
+        });
+      } catch (err) {
+        console.error(err);
+        // set upload status to failed
+        await db.file.update({
+          data: {
+            uploadStatus: 'FAILED',
+          },
+          where: {
+            id: createdFile.id,
+          },
+        });
+      }
     }),
 } satisfies FileRouter;
 
