@@ -1,18 +1,12 @@
 import { PDFLoader } from 'langchain/document_loaders/fs/pdf';
 import { HuggingFaceInferenceEmbeddings } from 'langchain/embeddings/hf';
-// import { OpenAIEmbeddings } from 'langchain/embeddings/openai';
 import { PineconeStore } from 'langchain/vectorstores/pinecone';
 import { type FileRouter, createUploadthing } from 'uploadthing/next';
 
+import { HF_TOKEN } from '@/config/envs';
 import { db } from '@/db';
 import { pinecone } from '@/lib/pinecone';
 import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
-
-// const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
-// if (!OPENAI_API_KEY) throw new Error('OPENAI_API_KEY is required.');
-
-const HF_TOKEN = process.env.HF_TOKEN;
-if (!HF_TOKEN) throw new Error('HF_TOKEN is required.');
 
 const f = createUploadthing();
 
@@ -60,7 +54,6 @@ export const ourFileRouter = {
 
         await PineconeStore.fromDocuments(pageLevelDocs, embeddings, {
           pineconeIndex,
-          // namespace: createdFile.id,
         });
 
         // set upload status to failed
@@ -74,6 +67,7 @@ export const ourFileRouter = {
         });
       } catch (err) {
         console.error(err);
+
         // set upload status to failed
         await db.file.update({
           data: {
