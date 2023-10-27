@@ -46,7 +46,6 @@ export const ourFileRouter = {
           pageLevelDoc.metadata = {
             ...pageLevelDoc.metadata,
             fileId: createdFile.id,
-            userId: metadata.userId,
           };
         });
 
