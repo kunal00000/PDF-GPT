@@ -51,7 +51,6 @@ export const appRouter = router({
     const { userId } = ctx;
 
     const billingUrl = absoluteUrl('/dashboard/billing');
-    console.log(billingUrl);
 
     if (!userId) throw new TRPCError({ code: 'UNAUTHORIZED' });
 
@@ -60,12 +59,10 @@ export const appRouter = router({
         id: userId,
       },
     });
-    console.log(dbUser);
 
     if (!dbUser) throw new TRPCError({ code: 'UNAUTHORIZED' });
 
     const subscriptionPlan = await getUserSubscriptionPlan();
-    console.log(subscriptionPlan);
 
     if (subscriptionPlan.isSubscribed && dbUser.stripeCustomerId) {
       const stripeSession = await stripe.billingPortal.sessions.create({
