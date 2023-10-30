@@ -8,7 +8,7 @@ export const PLANS = [
     pagesPerPdf: 5,
     price: {
       amount: 0,
-      priceId: {
+      priceIds: {
         test: '',
         production: '',
       },
@@ -21,7 +21,7 @@ export const PLANS = [
     pagesPerPdf: 25,
     price: {
       amount: 999,
-      priceId: {
+      priceIds: {
         test: STRIPE_API_KEY,
         production: '',
       },
