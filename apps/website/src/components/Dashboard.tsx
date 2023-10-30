@@ -7,6 +7,7 @@ import { useState } from 'react';
 import Skeleton from 'react-loading-skeleton';
 
 import { trpc } from '@/app/_trpc/client';
+import { UserFile } from '@/types/file';
 
 import UploadButton from './UploadButton';
 import { Button } from './ui/button';
@@ -45,7 +46,7 @@ const Dashboard = () => {
         <ul className='mt-8 grid grid-cols-1 gap-6 divide-y divide-zinc-200 md:grid-cols-2 lg:grid-cols-3'>
           {files
             .sort(
-              (a, b) =>
+              (a: UserFile, b: UserFile) =>
                 new Date(b.createdAt).getTime() -
                 new Date(a.createdAt).getTime(),
             )
