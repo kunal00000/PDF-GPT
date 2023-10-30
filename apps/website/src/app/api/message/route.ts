@@ -73,10 +73,20 @@ export const POST = async (req: NextRequest) => {
       take: 6,
     });
 
-    const formattedPrevMessages = prevMessages.map((msg) => ({
-      role: msg.isUserMessage ? ('user' as const) : ('assistant' as const),
-      content: msg.text,
-    }));
+    const formattedPrevMessages = prevMessages.map(
+      (msg: {
+        id: string;
+        text: string;
+        isUserMessage: boolean;
+        createdAt: Date;
+        updatedAt: Date;
+        userId: string | null;
+        fileId: string | null;
+      }) => ({
+        role: msg.isUserMessage ? ('user' as const) : ('assistant' as const),
+        content: msg.text,
+      }),
+    );
 
     const builtPrompt = `<|assistant|>Use the following pieces of context (or previous conversaton if needed) to answer the users question in markdown format. <|endoftext|>
     <|prompter|>If you don't know the answer, just say that you don't know, don't try to make up an answer.<|endoftext|>
