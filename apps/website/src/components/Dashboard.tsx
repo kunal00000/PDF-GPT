@@ -50,7 +50,7 @@ const Dashboard = () => {
                 new Date(b.createdAt).getTime() -
                 new Date(a.createdAt).getTime(),
             )
-            .map((file) => {
+            .map((file: UserFile) => {
               return (
                 <li
                   key={file.id}
