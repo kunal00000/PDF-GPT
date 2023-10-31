@@ -1,3 +1,5 @@
+'use strict';
+
 import { ReactNode, createContext, useRef, useState } from 'react';
 
 import { trpc } from '@/app/_trpc/client';
@@ -72,11 +74,9 @@ export const ChatContextProvider = ({ fileId, children }: Props) => {
             };
           }
 
-          console.log('old', old);
           let newPages = [...old.pages];
 
           let latestPage = newPages[0];
-          console.log('page: ' + latestPage);
 
           latestPage.messages = [
             {

@@ -1,3 +1,5 @@
+'use client';
+
 import { Send } from 'lucide-react';
 import { useContext, useRef } from 'react';
 
