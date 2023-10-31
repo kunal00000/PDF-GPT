@@ -5,6 +5,8 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
+import { LoginLink, RegisterLink } from '@kinde-oss/kinde-auth-nextjs/server';
+
 const MobileNav = ({ isAuth }: { isAuth: boolean }) => {
   const [isOpen, setOpen] = useState<boolean>(false);
 
@@ -35,24 +37,24 @@ const MobileNav = ({ isAuth }: { isAuth: boolean }) => {
             {!isAuth ? (
               <>
                 <li>
-                  <Link
+                  <RegisterLink
                     onClick={() => closeOnCurrent('/sign-up')}
                     className='flex items-center w-full font-semibold text-green-600'
-                    href='/sign-up'
+                    // href='/sign-up'
                   >
                     Get started
                     <ArrowRight className='ml-2 h-5 w-5' />
-                  </Link>
+                  </RegisterLink>
                 </li>
                 <li className='my-3 h-px w-full bg-gray-300' />
                 <li>
-                  <Link
+                  <LoginLink
                     onClick={() => closeOnCurrent('/sign-in')}
                     className='flex items-center w-full font-semibold'
-                    href='/sign-in'
+                    // href='/sign-in'
                   >
                     Sign in
-                  </Link>
+                  </LoginLink>
                 </li>
                 <li className='my-3 h-px w-full bg-gray-300' />
                 <li>
