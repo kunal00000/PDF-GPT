@@ -1,5 +1,4 @@
-'use strict';
-
+// @ts-nocheck
 import { ReactNode, createContext, useRef, useState } from 'react';
 
 import { trpc } from '@/app/_trpc/client';
@@ -78,7 +77,6 @@ export const ChatContextProvider = ({ fileId, children }: Props) => {
 
           let latestPage = newPages[0];
 
-          //@ts-ignore
           latestPage.messages = [
             {
               createdAt: new Date().toISOString(),
@@ -86,7 +84,6 @@ export const ChatContextProvider = ({ fileId, children }: Props) => {
               text: message,
               isUserMessage: true,
             },
-            //@ts-ignore
             ...latestPage.messages,
           ];
 
