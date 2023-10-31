@@ -4,8 +4,10 @@ import { PineconeStore } from 'langchain/vectorstores/pinecone';
 import { type FileRouter, createUploadthing } from 'uploadthing/next';
 
 import { HF_TOKEN } from '@/config/envs';
+import { PLANS } from '@/config/stripe';
 import { db } from '@/db';
 import { pinecone } from '@/lib/pinecone';
+import { getUserSubscriptionPlan } from '@/lib/stripe';
 import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
 
 const f = createUploadthing();
@@ -18,7 +20,9 @@ export const ourFileRouter = {
 
       if (!user || !user.id) throw new Error(`Unauthorized`);
 
-      return { userId: user.id };
+      const subscriptionPlan = await getUserSubscriptionPlan();
+
+      return { subscriptionPlan, userId: user.id };
     })
     .onUploadComplete(async ({ metadata, file }) => {
       const createdFile = await db.file.create({
@@ -50,6 +54,26 @@ export const ourFileRouter = {
         });
 
         const pagesAmt = pageLevelDocs.length; // pages count
+
+        const { subscriptionPlan } = metadata;
+        const { isSubscribed } = subscriptionPlan;
+        const isProExceeded =
+          pagesAmt > PLANS.find((plan) => plan.name === 'Pro')!.pagesPerPdf;
+        const isFreeExceeded =
+          pagesAmt > PLANS.find((plan) => plan.name === 'Free')!.pagesPerPdf;
+        if (
+          (isSubscribed && isProExceeded) ||
+          (!isSubscribed && isFreeExceeded)
+        ) {
+          await db.file.update({
+            data: {
+              uploadStatus: 'FAILED',
+            },
+            where: {
+              id: createdFile.id,
+            },
+          });
+        }
 
         // vectorize and index entire document
         const pineconeIndex = await pinecone.Index('docuconvo');
