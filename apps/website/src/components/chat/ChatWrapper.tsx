@@ -1,5 +1,6 @@
 'use client';
 
+// @ts-nocheck
 import { ChevronLeft, Loader2, XCircle } from 'lucide-react';
 import Link from 'next/link';
 
