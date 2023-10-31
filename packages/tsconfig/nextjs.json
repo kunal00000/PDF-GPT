@@ -13,6 +13,7 @@
     "module": "esnext",
     "noEmit": true,
     "resolveJsonModule": true,
+    "strictNullChecks": true,
     "strict": true,
     "target": "es5"
   },

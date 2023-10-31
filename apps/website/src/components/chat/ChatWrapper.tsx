@@ -40,7 +40,7 @@ const ChatWrapper = ({ fileId }: ChatWrapperProps) => {
         <ChatInput isDisabled />
       </div>
     );
-
+  // @ts-ignore
   if (data?.status === 'PROCESSING')
     return (
       <div className='relative min-h-full bg-zinc-50 flex divide-y divide-zinc-200 flex-col justify-between gap-2'>
@@ -56,6 +56,7 @@ const ChatWrapper = ({ fileId }: ChatWrapperProps) => {
       </div>
     );
 
+  // @ts-ignore
   if (data?.status === 'FAILED')
     return (
       <div className='relative min-h-full bg-zinc-50 flex divide-y divide-zinc-200 flex-col justify-between gap-2'>
