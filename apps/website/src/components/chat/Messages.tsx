@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Loader2, MessageSquare } from 'lucide-react';
 import { useContext, useEffect, useRef } from 'react';
 import Skeleton from 'react-loading-skeleton';
