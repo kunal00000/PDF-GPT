@@ -4,6 +4,7 @@ import Link from 'next/link';
 
 import MaxWidthWrapper from '@/components/MaxWidthWrapper';
 import { buttonVariants } from '@/components/ui/button';
+import { RegisterLink } from '@kinde-oss/kinde-auth-nextjs/server';
 
 export default function Home() {
   return (
@@ -22,14 +23,12 @@ export default function Home() {
           DocuConvo allows you to have conversations with any PDF document.
           Simply upload your file and start asking questions right away.
         </p>
-        <Link
-          href={'/dashboard'}
-          target='_blank'
+        <RegisterLink
           className={buttonVariants({ size: 'lg', className: 'mt-5' })}
         >
           Get started
           <ArrowRight className='ml-2 h-5 w-5' />
-        </Link>
+        </RegisterLink>
       </MaxWidthWrapper>
 
       {/* value proposition section */}
