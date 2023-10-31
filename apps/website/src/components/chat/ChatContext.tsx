@@ -86,6 +86,7 @@ export const ChatContextProvider = ({ fileId, children }: Props) => {
               text: message,
               isUserMessage: true,
             },
+            //@ts-ignore
             ...latestPage.messages,
           ];
 
