@@ -5,12 +5,6 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
-import {
-  LoginLink,
-  LogoutLink,
-  RegisterLink,
-} from '@kinde-oss/kinde-auth-nextjs/server';
-
 const MobileNav = ({ isAuth }: { isAuth: boolean }) => {
   const [isOpen, setOpen] = useState<boolean>(false);
 
@@ -41,16 +35,24 @@ const MobileNav = ({ isAuth }: { isAuth: boolean }) => {
             {!isAuth ? (
               <>
                 <li>
-                  <RegisterLink className='flex items-center w-full font-semibold text-green-600'>
+                  <Link
+                    onClick={() => closeOnCurrent('/sign-up')}
+                    className='flex items-center w-full font-semibold text-green-600'
+                    href='/sign-up'
+                  >
                     Get started
                     <ArrowRight className='ml-2 h-5 w-5' />
-                  </RegisterLink>
+                  </Link>
                 </li>
                 <li className='my-3 h-px w-full bg-gray-300' />
                 <li>
-                  <LoginLink className='flex items-center w-full font-semibold'>
+                  <Link
+                    onClick={() => closeOnCurrent('/sign-in')}
+                    className='flex items-center w-full font-semibold'
+                    href='/sign-in'
+                  >
                     Sign in
-                  </LoginLink>
+                  </Link>
                 </li>
                 <li className='my-3 h-px w-full bg-gray-300' />
                 <li>
@@ -76,9 +78,12 @@ const MobileNav = ({ isAuth }: { isAuth: boolean }) => {
                 </li>
                 <li className='my-3 h-px w-full bg-gray-300' />
                 <li>
-                  <LogoutLink className='flex items-center w-full font-semibold'>
+                  <Link
+                    className='flex items-center w-full font-semibold'
+                    href='/sign-out'
+                  >
                     Sign out
-                  </LogoutLink>
+                  </Link>
                 </li>
               </>
             )}
