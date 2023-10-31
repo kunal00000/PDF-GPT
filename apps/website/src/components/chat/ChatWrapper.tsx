@@ -1,6 +1,5 @@
 'use client';
 
-// @ts-nocheck
 import { ChevronLeft, Loader2, XCircle } from 'lucide-react';
 import Link from 'next/link';
 
@@ -20,6 +19,7 @@ const ChatWrapper = ({ fileId }: ChatWrapperProps) => {
     { fileId },
     {
       refetchInterval: (data) =>
+        // @ts-ignore
         data?.status === 'SUCCESS' || data?.status === 'FAILED' ? false : 500,
     },
   );
