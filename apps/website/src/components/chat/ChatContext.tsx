@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { ReactNode, createContext, useRef, useState } from 'react';
 
 import { trpc } from '@/app/_trpc/client';
