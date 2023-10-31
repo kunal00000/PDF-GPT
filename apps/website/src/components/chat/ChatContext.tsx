@@ -1,3 +1,5 @@
+'use client';
+
 import { ReactNode, createContext, useRef, useState } from 'react';
 
 import { trpc } from '@/app/_trpc/client';
