@@ -74,7 +74,15 @@ export const ChatContextProvider = ({ fileId, children }: Props) => {
 
           let newPages = [...old.pages];
 
-          let latestPage = newPages[0]!;
+          let latestPage: {
+            messages: {
+              id: string;
+              createdAt: string;
+              text: string;
+              isUserMessage: boolean;
+            }[];
+            nextCursor?: string | undefined;
+          } = newPages[0]!;
 
           latestPage.messages = [
             {
