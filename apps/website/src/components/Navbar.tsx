@@ -65,7 +65,6 @@ const Navbar = () => {
                 >
                   Dashboard
                 </Link>
-                {/* @ts-expect-error Server Component */}
                 <UserAccountNav
                   name={
                     !user.given_name || !user.family_name
