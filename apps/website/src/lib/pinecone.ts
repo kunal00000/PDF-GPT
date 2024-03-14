@@ -3,5 +3,4 @@ import { Pinecone } from '@pinecone-database/pinecone';
 
 export const pinecone = new Pinecone({
   apiKey: PINECONE_API_KEY,
-  environment: PINECONE_ENV,
 });

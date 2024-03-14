@@ -1,14 +1,15 @@
 import { PDFLoader } from 'langchain/document_loaders/fs/pdf';
-import { HuggingFaceInferenceEmbeddings } from 'langchain/embeddings/hf';
-import { PineconeStore } from 'langchain/vectorstores/pinecone';
 import { type FileRouter, createUploadthing } from 'uploadthing/next';
 
-import { HF_TOKEN } from '@/config/envs';
+import { GEMINI_API_KEY } from '@/config/envs';
 import { PLANS } from '@/config/stripe';
 import { db } from '@/db';
 import { pinecone } from '@/lib/pinecone';
 import { getUserSubscriptionPlan } from '@/lib/stripe';
+import { TaskType } from '@google/generative-ai';
 import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
+import { GoogleGenerativeAIEmbeddings } from '@langchain/google-genai';
+import { PineconeStore } from '@langchain/pinecone';
 
 const f = createUploadthing();
 
@@ -88,17 +89,22 @@ const onUploadComplete = async ({
       });
     }
 
+    const embeddings = new GoogleGenerativeAIEmbeddings({
+      apiKey: GEMINI_API_KEY,
+      modelName: 'embedding-001',
+      taskType: TaskType.RETRIEVAL_DOCUMENT,
+    });
+
     // vectorize and index entire document
-    const pineconeIndex = await pinecone.Index('docuconvo');
+    const pineconeIndex = await pinecone.Index('docs');
 
-    const embeddings = new HuggingFaceInferenceEmbeddings({
-      model: 'sentence-transformers/all-MiniLM-L6-v2',
-      apiKey: HF_TOKEN,
-    });
-
-    await PineconeStore.fromDocuments(pageLevelDocs, embeddings, {
-      pineconeIndex,
-    });
+    const vectors = await PineconeStore.fromDocuments(
+      pageLevelDocs,
+      embeddings,
+      {
+        pineconeIndex,
+      },
+    );
 
     // set upload status to failed
     await db.file.update({
